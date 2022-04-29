@@ -1,8 +1,6 @@
 # How this works (PublicServer Example)
 
-1) Connects to PublicServer
-2) Creates a Server Storage Port using username
-3) Server Access code is made
+![Security Checks](https://github.com/EpicGamerCodes/CWPF/actions/workflows/codeql-analysis.yml/badge.svg)
 
 How to connect:
 
