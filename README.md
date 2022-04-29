@@ -7,9 +7,8 @@
 How to connect:
 
 1) Connect to PublicServer
-2) Enter your username
-3) Enter hostname (user who has created the SSP)
-4) Enter Server Access Code
+2) Enter hostname (user who has created the SSP)
+3) Enter Server Access Code
 
 WARNINGS:
 By using this program, user data is collected for security of SSP's. User data is not used for any other reason.
