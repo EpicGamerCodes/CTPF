@@ -1,0 +1,32 @@
+name: Feature Request
+description: Suggest an idea for Chat with Python File
+labels: [feature request]
+body:
+  - type: textarea
+    attributes:
+      label: What's the Problem?
+      description: If your feature request is related to a problem, describe it clearly.
+  - type: textarea
+    attributes:
+      label: Solution/Idea
+      description: Describe your solution/idea.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Alternatives
+      description: Describe alternatives you've considered
+    validations:
+      required: true
+  - type: input
+    id: jp-version
+    attributes:
+      label: CWPF Version
+      description: Which commit are you using of CWPF?
+      placeholder: "e.g. Pre-Alpha 1.1.0 - 2e685a431059df912443acdbf1c6000ad108ba9f"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Comments
+      description: Additional information, comments, screenshots or videos
