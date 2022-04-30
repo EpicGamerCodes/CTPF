@@ -17,7 +17,7 @@ class Config:
 		info = {}
 		info["creator"] = username
 		info["version"] = version
-		config["perms"] = {username:{"alert":True}}
+		config["perms"] = {username:{"alert":True, "blacklist":True, "whitelist":True}}
 		config["info"] = info
 		config["blacklist"] = []
 		config["whitelist"] = {"enabled":False, "users":[]}
@@ -190,24 +190,28 @@ class Chat:
 					print("exit...")
 					f.write(f"\n>> {self.nickname} ({self.username}) has left the chat <<")
 					loop = False
+				
 				elif text.lower() == "/reader":
 					print("reader...")
 					os.system(f"start cmd /C {os.path.dirname(os.path.realpath(__file__))}\\.assets\\read.bat {self.code} 1 {self.path}\\{self.code}.txt")
 				
 				elif text.lower()[:11] == "blacklist: ":
-					self.host_conf["whitelist"]["enabled"] = False
-
-					self.host_conf["blacklist"].append(self.username)
-					self.save(self.path + "/config.json",self.host_conf)
+					if self.host_conf["perms"][self.username]["blacklist"] is True:
+						self.host_conf["whitelist"]["enabled"] = False
+						self.host_conf["blacklist"].append(self.username)
+						self.save(self.path + "/config.json",self.host_conf)
+				
 				elif text.lower()[:11] == "whitelist: ":
-
-					self.host_conf["whitelist"]["enabled"] = True
-					self.host_conf["whitelist"]["users"].append(self.username)
-					self.save(self.path + "/config.json",self.host_conf)
+					if self.host_conf["perms"][self.username]["whitelist"] is True:
+						self.host_conf["blacklist"]["enabled"] = False
+						self.host_conf["whitelist"]["enabled"] = True
+						self.host_conf["whitelist"]["users"].append(self.username)
+						self.save(self.path + "/config.json",self.host_conf)
 				
 				elif text.lower()[:7] == "alert: ":
 					if self.host_conf["perms"][self.username]["alert"] is True:
 						f.write(f"\n>> {text[7:]} <<")
+				
 				else:
 					print("Writing...")
 					f.write(f"\n{self.nickname}: {text}")
