@@ -20,6 +20,7 @@ class Config:
 		config["perms"] = {username:{"alert":True}}
 		config["info"] = info
 		config["blacklist"] = []
+		config["whitelist"] = {"enabled":False, "users":[]}
 		with open(file, "w") as f:
 			f.write(json.dumps(config, indent = 4))
 		return config
@@ -90,6 +91,11 @@ class Chat:
 		if self.username in self.host_conf["blacklist"]:
 			input("ERROR: You have been blacklisted from this chat\nPress Anything to Exit.")
 			exit()
+		
+		if self.host_conf["whitelist"]["enabled"]:
+			if not self.username in self.host_conf["whitelist"]["users"]:
+				input("ERROR: A whitelist is in effect and you can not join this chat\nPress Anything to Exit.")
+				exit()
 		
 	def ask(self):
 		self.cont = True
@@ -187,9 +193,18 @@ class Chat:
 				elif text.lower() == "/reader":
 					print("reader...")
 					os.system(f"start cmd /C {os.path.dirname(os.path.realpath(__file__))}\\.assets\\read.bat {self.code} 1 {self.path}\\{self.code}.txt")
+				
 				elif text.lower()[:11] == "blacklist: ":
+					self.host_conf["whitelist"]["enabled"] = False
+
 					self.host_conf["blacklist"].append(self.username)
 					self.save(self.path + "/config.json",self.host_conf)
+				elif text.lower()[:11] == "whitelist: ":
+
+					self.host_conf["whitelist"]["enabled"] = True
+					self.host_conf["whitelist"]["users"].append(self.username)
+					self.save(self.path + "/config.json",self.host_conf)
+				
 				elif text.lower()[:7] == "alert: ":
 					if self.host_conf["perms"][self.username]["alert"] is True:
 						f.write(f"\n>> {text[7:]} <<")
@@ -203,7 +218,8 @@ class Chat:
 			f.write(json.dumps(config, indent = 4))
 
 if __name__ == "__main__":
-	app = Chat("//curriculum.lan/filestore/home/2019/bevyn.fernandes/PublicServer")
+	# "//curriculum.lan/filestore/home/2019/bevyn.fernandes/PublicServer"
+	app = Chat("C:/Users/bevyn/Documents/CTPF/PublicServer")
 	app.ask()
 	app.checks()
 	app.chat()
