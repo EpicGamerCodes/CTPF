@@ -51,7 +51,7 @@ class Chat:
 		self.version = Chat.version
 		self.config = Config()
 		
-		gh = requests.get("https://api.github.com/repos/EpicGamerCodes/CWPF/releases/latest").json()
+		gh = requests.get("https://api.github.com/repos/EpicGamerCodes/CTPF/releases/latest").json()
 		if not gh["name"] == f"v{self.version}":
 			gh_version = gh["name"]
 			gh_body = gh["body"]

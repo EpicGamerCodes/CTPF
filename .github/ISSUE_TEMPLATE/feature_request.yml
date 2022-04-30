@@ -21,8 +21,8 @@ body:
   - type: input
     id: jp-version
     attributes:
-      label: CWPF Version
-      description: Which commit are you using of CWPF?
+      label: CTPF Version
+      description: Which commit are you using of CTPF?
       placeholder: "e.g. Pre-Alpha 1.1.0 - 2e685a431059df912443acdbf1c6000ad108ba9f"
     validations:
       required: true

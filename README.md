@@ -1,6 +1,6 @@
 # Chat with Python File
 
-![Security Checks](https://github.com/EpicGamerCodes/CWPF/actions/workflows/codeql-analysis.yml/badge.svg)
+![Security Checks](https://github.com/EpicGamerCodes/CTPF/actions/workflows/codeql-analysis.yml/badge.svg)
 
 How to connect:
 

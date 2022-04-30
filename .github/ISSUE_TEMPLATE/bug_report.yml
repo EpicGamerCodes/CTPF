@@ -25,7 +25,7 @@ body:
     validations:
       required: true
   - type: input
-    id: jp-version
+    id: ctpf-version
     attributes:
       label: CTPF Version
       description: Which commit are you using of CTPF?
