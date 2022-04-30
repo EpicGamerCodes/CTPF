@@ -19,6 +19,7 @@ class Config:
 		info["version"] = version
 		config["perms"] = {username:{"alert":True}}
 		config["info"] = info
+		config["blacklist"] = []
 		with open(file, "w") as f:
 			f.write(json.dumps(config, indent = 4))
 		return config
@@ -81,8 +82,13 @@ class Chat:
 			eta = self.server_conf["status"]["eta"]
 			input(f"ERROR: Server is offline.\nReason: {reason}\n Online in: {eta}")
 			exit()
+
 		if self.username in self.server_conf["banned"]:
 			input("ERROR: You have been banned\nPress Anything to Exit.")
+			exit()
+
+		if self.username in self.host_conf["blacklist"]:
+			input("ERROR: You have been blacklisted from this chat\nPress Anything to Exit.")
 			exit()
 		
 	def ask(self):
@@ -181,6 +187,9 @@ class Chat:
 				elif text.lower() == "/reader":
 					print("reader...")
 					os.system(f"start cmd /C {os.path.dirname(os.path.realpath(__file__))}\\.assets\\read.bat {self.code} 1 {self.path}\\{self.code}.txt")
+				elif text.lower()[:11] == "blacklist: ":
+					self.host_conf["blacklist"].append(self.username)
+					self.save(self.path + "/config.json",self.host_conf)
 				elif text.lower()[:7] == "alert: ":
 					if self.host_conf["perms"][self.username]["alert"] is True:
 						f.write(f"\n>> {text[7:]} <<")
@@ -188,6 +197,10 @@ class Chat:
 					print("Writing...")
 					f.write(f"\n{self.nickname}: {text}")
 			os.system("cls")
+	
+	def save(self, file: str, config: dict):
+		with open(file, "w") as f:
+			f.write(json.dumps(config, indent = 4))
 
 if __name__ == "__main__":
 	app = Chat("//curriculum.lan/filestore/home/2019/bevyn.fernandes/PublicServer")
