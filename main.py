@@ -1,5 +1,6 @@
 import json
 import os
+import requests
 
 def ask(prompt: str, yes: str = "Y", no: str = "N"):
     responce = "Not Set"
@@ -49,6 +50,18 @@ class Chat:
 		self.server = server
 		self.version = Chat.version
 		self.config = Config()
+		
+		gh = requests.get("https://api.github.com/repos/EpicGamerCodes/CWPF/releases/latest").json()
+		if not gh["name"] == f"v{self.version}":
+			gh_version = gh["name"]
+			gh_body = gh["body"]
+			gh_published = gh["published_at"]
+			if ask(f"An update is required. {gh_version} (Published at {gh_published}) includes:\n{gh_body}\nUpdate?"):
+				gh_url = gh["html_url"]
+				os.system(f'start "" "{gh_url}"')
+				exit()
+			else:
+				exit()
 		
 		os.system("title " + self.title)
 		with open(self.server + "/config.json", "r") as f:
