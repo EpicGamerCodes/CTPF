@@ -1,4 +1,4 @@
-# How this works (PublicServer Example)
+# Chat with Python File
 
 ![Security Checks](https://github.com/EpicGamerCodes/CWPF/actions/workflows/codeql-analysis.yml/badge.svg)
 
@@ -8,10 +8,17 @@ How to connect:
 2) Enter hostname (user who has created the SSP)
 3) Enter Server Access Code
 
-WARNINGS:
+## Notes: 
+- A username is linked with the Windows Username, secondary preventing account creation.
+- Each user can create a maximum of 3 chats (SSP's) and will be automaticly deleted if inactive by each Friday.
+- Every Release is throughly checked for bugs and each commit for security issues.
+- For bleeding edge builds, check out
+- If you are not on the latest version, an alert will display, not allowing you to proceed with an older version.
+
+## Wanings:
 By using this program, user data is collected for security of SSP's. User data is not used for any other reason.
 If a critical change occours, on SSP load, the SSP will reset to prevent issues.
-The creator of this program can broadcast a message across all active SSP's (If server is restarting or undergoing changes).
+The creator of this program can broadcast a message across all active SSP's (If server is restarting or undergoing changes). Collected data: Windows Username
 
 Formation of PublicServer/config.json:
 
