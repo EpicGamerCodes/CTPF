@@ -14,6 +14,7 @@ def main(path = sys.argv[1]):
 	config["status"]["eta"] = 0
 	config["banned"] = {}
 	config["banned"]["users"] = []
+	config["users"] = {}
 	with open(path + "/config.json", "w") as f:
 		f.write(json.dumps(config, indent = 4))
 

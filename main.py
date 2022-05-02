@@ -1,5 +1,7 @@
 import json
+import sys
 import os
+
 import requests
 
 def ask(prompt: str, yes: str = "Y", no: str = "N"):
@@ -46,6 +48,7 @@ class Config:
 
 class Chat:
 	version: str = "v1.0.0-alpha"
+	compatible_versions: list = []
 	
 	def __init__(self, server: str = None):
 		self.title = "Chat through Python File"
@@ -88,10 +91,16 @@ class Chat:
 			input(f"ERROR: Server is offline.\nReason: {reason}\n Online in: {eta}")
 			exit()
 
-		if self.username in self.server_conf["banned"]:
+		if self.username in self.server_conf["banned"]["users"]:
 			input("ERROR: You have been banned\nPress Anything to Exit.")
 			exit()
-
+		
+		if not self.version == self.host_conf["info"]["version"]:
+			if not self.host_conf["info"]["version"] in Chat.compatible_versions:
+				chat_config = self.host_conf["info"]["version"]
+				input(f"Your chat config {chat_config} is incompatible with the built in one. Until a fix comes for this, you should make a new chat.")
+				exit()
+		
 		if self.username in self.host_conf["blacklist"]:
 			input("ERROR: You have been blacklisted from this chat\nPress Anything to Exit.")
 			exit()
@@ -167,13 +176,12 @@ class Chat:
 					check = True
 		
 		self.file = self.path + "/" + self.code + ".txt"
+		self.host_conf = self.config.read(self.path + "/config.json", self.username)
 
 	def chat(self):
 		os.system("cls")
 		self.nickname = self.server_conf["users"][self.username][0]
-		if self.cont:
-			self.host_conf = self.config.read(self.path + "/config.json", self.username)
-		else:
+		if not self.cont:
 			with open(self.file, "w") as f:
 				f.write(f"Created by {self.username}")
 		
@@ -183,9 +191,13 @@ class Chat:
 			f.write(f"\n{self.nickname} ({self.username}) joined the chat.")
 
 		text = ""
+		warn = False
 		while loop:
 			if text.lower()[:7] == "alert: ": # Here because screen gets cleared later on.
 				print("You don't have the permissions for that!")
+			if warn:
+				print(warn)
+				warn = False
 			
 			text = input("> ")
 			with open(self.file, "a") as f:
@@ -202,14 +214,22 @@ class Chat:
 				elif text.lower()[:11] == "blacklist: ":
 					if self.host_conf["perms"][self.username]["blacklist"] is True:
 						self.host_conf["whitelist"]["enabled"] = False
-						self.host_conf["blacklist"].append(self.username)
-						self.save(self.path + "/config.json",self.host_conf)
+						if text[11:] in list(self.server_conf["users"].keys()):
+							self.host_conf["blacklist"].append(text[11:])
+							self.save(self.path + "/config.json",self.host_conf)
+						else:
+							warn = f"User ({text[11:]}) does not exist!"
 				
 				elif text.lower()[:11] == "whitelist: ":
 					if self.host_conf["perms"][self.username]["whitelist"] is True:
-						self.host_conf["blacklist"]["enabled"] = False
+						self.host_conf["blacklist"] = []
 						self.host_conf["whitelist"]["enabled"] = True
-						self.host_conf["whitelist"]["users"].append(self.username)
+						if not self.username in self.host_conf["whitelist"]["users"]:
+							self.host_conf["whitelist"]["users"].append(self.username)
+						if text[11:] in list(self.server_conf["users"].keys()):
+							self.host_conf["whitelist"]["users"].append(text[:11])
+						else:
+							warn = f"User ({text[11:]}) does not exist!"
 						self.save(self.path + "/config.json",self.host_conf)
 				
 				elif text.lower()[:7] == "alert: ":
@@ -226,8 +246,10 @@ class Chat:
 			f.write(json.dumps(config, indent = 4))
 
 if __name__ == "__main__":
-	# "//curriculum.lan/filestore/home/2019/bevyn.fernandes/PublicServer"
-	app = Chat("C:/Users/bevyn/Documents/CTPF/PublicServer")
+	try:
+		app = Chat(sys.argv[1])
+	except Exception:
+		app = Chat("//curriculum.lan/filestore/home/2019/bevyn.fernandes/PublicServer")
 	app.ask()
 	app.checks()
 	app.chat()
