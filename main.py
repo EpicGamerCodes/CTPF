@@ -43,7 +43,7 @@ class Config:
 		return config
 
 class Chat:
-	version: str = "1.0.0"
+	version: str = "v1.0.0-alpha"
 	
 	def __init__(self, server: str = None):
 		self.title = "Chat through Python File"
@@ -52,7 +52,7 @@ class Chat:
 		self.config = Config()
 		
 		gh = requests.get("https://api.github.com/repos/EpicGamerCodes/CTPF/releases/latest").json()
-		if not gh["name"] == f"v{self.version}":
+		if not gh["name"] == f"{self.version}":
 			gh_version = gh["name"]
 			gh_body = gh["body"]
 			gh_published = gh["published_at"]
