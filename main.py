@@ -74,6 +74,10 @@ class Chat:
 				self.server_conf["users"][self.username] = [nickname, 0]
 				with open(self.server + "/config.json", "w") as f:
 					f.write(json.dumps(self.server_conf, indent = 4))
+			else:
+				self.server_conf["users"][self.username] = [self.username, 0]
+				with open(self.server + "/config.json", "w") as f:
+					f.write(json.dumps(self.server_conf, indent = 4))	
 	
 	def checks(self):
 		if self.server_conf["status"]["online"] is False:
